@@ -148,7 +148,7 @@ idea_feasibility_response_schema = {
         "regulations_to_consider": ["string"],
         "licenses_required": ["string"]
       },
-    "overall_feasibility_score": "A score or rating (e.g., 1-10) indicating the overall feasibility of the idea."
+    "overall_feasibility_score": "A score or rating (e.g., 1-100) indicating the overall feasibility of the idea."
   },
   "scope": {
     "problem_statement": "Detailed description of the problem the startup aims to solve.",

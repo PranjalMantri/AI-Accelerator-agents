@@ -35,17 +35,21 @@ async def chat(request: ChatRequest, session_id: str = Cookie(None)):
     session_id = get_or_create_session(session_id)
     result = chatbot.send_message(session_id, request.message)
 
+    chatbot_response = result.get("response", "")
+
+    if result.get("end_conversation"):
+        chatbot_response = result.get("summary", chatbot_response)  # Get summary directly if available
+        chatbot.clear_history(session_id)
+
     response_data = ChatResponse(
         session_id=session_id,
-        chatbot_response=result.get("response", ""),
+        chatbot_response=chatbot_response,
         conversation=chatbot.get_conversation_history(session_id),
         end_conversation=result.get("end_conversation", False)
     )
 
-    if result.get("end_conversation"):
-        chatbot.clear_history(session_id)
-
     return JSONResponse(content=response_data.dict(), headers={"Set-Cookie": f"session_id={session_id}; Path=/"})
+
 
 @app.get("/reset")
 async def reset_chat(session_id: str = Cookie(None)):
