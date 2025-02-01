@@ -1,8 +1,10 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware 
 from pydantic import BaseModel
 from google import genai
 from google.genai.types import Tool, ToolConfig, GenerateContentConfig, GoogleSearch, FunctionCallingConfig
 import os
+import uvicorn
 import json
 from dotenv import load_dotenv
 from config import (
@@ -15,10 +17,17 @@ load_dotenv()
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  
+    allow_credentials=True,
+    allow_methods=["*"],  
+    allow_headers=["*"],
+)
+
 client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
 model_id = "gemini-2.0-flash-exp"
 
-# Market Analysis Configuration
 market_analysis_response_schema = market_analysis_response_schema
 market_analysis_system_instruction = market_analysis_system_instruction
 
@@ -41,7 +50,7 @@ market_config = GenerateContentConfig(
 idea_feasibility_response_schema = idea_feasibility_response_schema
 
 idea_feasibility_config = GenerateContentConfig(
-    system_instruction=(
+    system_instruction=(  # Adjusted system instruction format
         "First validate via web search:\n"
         "- Market size (2024)\n"
         "- Competitor features\n"
@@ -68,7 +77,7 @@ async def analyze_market(startup_idea: StartupIdea):
     Output MUST CONTAIN NUMERIC VALUES for all fields
     "Cite sources from industry reports and competitor websites.",
     "Format response as JSON with sources."""]
-
+    
     response = client.models.generate_content(
         model=model_id,
         contents=contents,
@@ -130,5 +139,4 @@ async def analyze_idea_feasibility(startup_idea: StartupIdea):
         raise HTTPException(status_code=500, detail="No response received")
 
 if __name__ == "__main__":
-    import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)

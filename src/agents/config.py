@@ -225,3 +225,31 @@ idea_feasibility_response_schema = {
     }
   ],
 }
+
+financial_advisor_response_schema = {
+  "feasibility_analysis": {
+    "runway": {
+      "time_left_months": "integer",  
+      "burn_rate": "float",          
+      "cash_reserves": "float"       
+    },
+    "fundraising_advice": {
+      "recommended_funding_amount": "float", 
+      "fundraising_strategy": "string",       
+      "timeline_for_funding": "string"        
+    },
+    "financial_risks": [
+      {
+        "risk_type": "string",  
+        "risk_description": "string",  
+        "mitigation_strategy": "string"  
+      }
+    ],
+    "sources": [
+      {
+        "title": "string",  
+        "url": "string"     
+      }
+    ]
+  }
+}
