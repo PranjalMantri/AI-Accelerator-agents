@@ -63,7 +63,7 @@ market_analysis_response_schema = {
                 }
             ]
         }
-    }
+  }, 
 }
 
 market_analysis_system_instruction = f"""You are a professional market analyst. Follow these steps STRICTLY:

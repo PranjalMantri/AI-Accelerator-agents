@@ -1,11 +1,20 @@
 from fastapi import FastAPI, Cookie
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import os
 import uuid
 from idea_chatbot import GeminiBrainstormBot
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  
+    allow_credentials=True,
+    allow_methods=["*"],  
+    allow_headers=["*"],
+)
 
 api_key = os.getenv("GOOGLE_API_KEY")
 chatbot = GeminiBrainstormBot(api_key)
@@ -32,6 +41,7 @@ async def chat(request: ChatRequest, session_id: str = Cookie(None)):
     """
     Chat with the bot. Sends user message and receives response.
     """
+    print("route was called")
     session_id = get_or_create_session(session_id)
     result = chatbot.send_message(session_id, request.message)
 

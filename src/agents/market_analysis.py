@@ -65,7 +65,9 @@ async def analyze_market(startup_idea: StartupIdea):
     - Market research reports (2023-2024)
     - Competitor annual reports
     - Government economic data
-    Output MUST CONTAIN NUMERIC VALUES for all fields"""]
+    Output MUST CONTAIN NUMERIC VALUES for all fields
+    "Cite sources from industry reports and competitor websites.",
+    "Format response as JSON with sources."""]
 
     response = client.models.generate_content(
         model=model_id,
@@ -83,7 +85,7 @@ async def analyze_market(startup_idea: StartupIdea):
 
             market_analysis = json.loads(json_text)
 
-            return {"market_analysis": market_analysis}
+            return market_analysis
 
         except json.JSONDecodeError as e:
             raise HTTPException(status_code=500, detail=f"JSON parsing error: {str(e)}")

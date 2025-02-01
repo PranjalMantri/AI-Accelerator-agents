@@ -14,7 +14,7 @@ model_id = "gemini-2.0-flash-exp"
 
 search_tool = Tool(google_search=GoogleSearch())
 
-startup_idea = "Jarvis like personal assistant using Deepseek R1 latest model"
+startup_idea = "Mental Heatlth habit tracker that is mainly designed for stressed adults"
 
 response_schema = idea_feasibility_response_schema
 
